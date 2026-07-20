@@ -1,0 +1,92 @@
+{
+  "device": {
+    "id": "left_gauntlet",
+    "default_preset": "off",
+    "debug": true,
+    "palette": {
+      "primary": [
+        120,
+        50,
+        0
+      ],
+      "secondary": [
+        20,
+        2,
+        0
+      ],
+      "tertiary": [
+        12,
+        10,
+        6
+      ],
+      "variance": 0.2,
+      "pulse": [
+        255,
+        255,
+        255
+      ]
+    },
+    "background": [
+      {
+        "module": "interface",
+        "params": {
+          "mosi": 6,
+          "sck": 4,
+          "left_btn": 1,
+          "right_btn": 3,
+          "pot": 2,
+          "spi_bus": 1,
+          "cs": 7,
+          "dc": 9,
+          "rst": 8,
+          "width": 256,
+          "height": 64
+        }
+      }
+    ],
+    "servos": [],
+    "leds": [
+      {
+        "id": "main",
+        "pin": 10,
+        "count": 6
+      }
+    ],
+    "buttons": [],
+    "presets": {
+      "off": {
+        "leds": {
+          "main": {
+            "animation": "off"
+          }
+        },
+        "scripts": [
+          {
+            "module": "ambiance",
+            "params": {
+              "min_delay_minutes": 1,
+              "max_delay_minutes": 3,
+              "led_targets": [
+                "main"
+              ],
+              "led_color_key": "tertiary",
+              "led_blinks": 3,
+              "led_color_rgb": [
+                0,
+                20,
+                80
+              ]
+            }
+          }
+        ]
+      },
+      "on": {
+        "leds": {
+          "main": {
+            "animation": "fill_primary"
+          }
+        }
+      }
+    }
+  }
+}

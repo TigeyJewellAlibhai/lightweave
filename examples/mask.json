@@ -1,0 +1,133 @@
+{
+  "device": {
+    "id": "mask",
+    "debug": true,
+    "leds": [
+      {
+        "id": "rm",
+        "pin": 3,
+        "count": 6
+      },
+      {
+        "id": "re",
+        "pin": 4,
+        "count": 6
+      },
+      {
+        "id": "le",
+        "pin": 5,
+        "count": 6
+      },
+      {
+        "id": "lm",
+        "pin": 6,
+        "count": 6
+      }
+    ],
+    "servos": [
+      {
+        "id": "ml",
+        "pin": 21,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "mr",
+        "pin": 20,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "sl",
+        "pin": 7,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "sr",
+        "pin": 2,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "buttons": [],
+    "presets": {
+      "extend": {
+        "servos": {
+          "ml": 35,
+          "mr": 145,
+          "sl": 165,
+          "sr": 15
+        },
+        "leds": {
+          "re": {
+            "color": [
+              180,
+              20,
+              0
+            ]
+          },
+          "le": {
+            "color": [
+              180,
+              20,
+              0
+            ]
+          },
+          "rm": {
+            "color": [
+              100,
+              40,
+              0
+            ]
+          },
+          "lm": {
+            "color": [
+              100,
+              40,
+              0
+            ]
+          }
+        }
+      },
+      "retract": {
+        "servos": {
+          "ml": 145,
+          "mr": 35,
+          "sl": 5,
+          "sr": 175
+        },
+        "leds": {
+          "re": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          },
+          "le": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          },
+          "rm": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          },
+          "lm": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+Welcome to Lightweave, a system designed for mechatronic cosplay
+
+Lightweave is structured as follows:
+- main.py runs the main loop
+- mesh.py provides the espnow mesh network for devices to communicate
+- servo.py provides a basic servo driver
+- led_controller.py provides a basic led driver
+- ssd1322.py provides a basic display driver
+- config.json (or <device>.json) provides a configuration that can be adjusted per device
+
+
+Config structure:
+
+{
+  "device": {
+    "id": "name of device",
+    "default_preset": "off_preset",
+    "debug": true,
+    
+    "palette": {
+      "primary": [120, 50, 0],
+      "secondary": [20, 2, 0],
+      "tertiary": [12, 10, 6],
+      "variance": 0.2,
+      "pulse": [255,255,255]
+    },
+    
+    "background": [
+      {
+        "module": "bg_script",
+        "params": {
+          "param1": 10,
+          "param2": 20
+        }
+      }
+    ],
+    
+    "servos": [],
+    
+    "leds": [
+      {"id": "strip1", "pin": 0, "count": 6},
+      {"id": "strip2","pin": 5,"count": 2}
+    ],
+    
+    "buttons": [
+      {
+        "pin": 20,
+        "send": ["mask open"]
+      },
+      {
+        "pin": 21,
+        "cycle": [
+          [
+            "mask closef"
+          ],
+          [
+            "mask 3"
+          ]
+        ]
+      }
+    ],
+    "presets": {
+      "off": {
+        "leds": {
+          "hand": {
+            "animation": "off"
+          }
+        }
+      },
+      "on": {
+        "leds": {
+          "hand": {
+            "hand": {
+              "animation": "fill_primary"
+            }
+          }
+        }
+      }
+    }
+  }
+}

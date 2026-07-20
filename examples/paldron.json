@@ -1,0 +1,248 @@
+{
+  "device": {
+    "id": "paldron",
+    "debug": true,
+    "default_preset": "retract",
+    "palette": {
+      "primary": [
+        140,
+        60,
+        0
+      ],
+      "secondary": [
+        180,
+        30,
+        0
+      ],
+      "tertiary": [
+        255,
+        255,
+        255
+      ],
+      "variance": 0.3,
+      "pulse": [
+        255,
+        150,
+        50
+      ]
+    },
+    "leds": [
+      {
+        "id": "eyes",
+        "pin": 9,
+        "count": 1
+      }
+    ],
+    "servos": [
+      {
+        "id": "ml",
+        "pin": 3,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "mr",
+        "pin": 2,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "turret",
+        "pin": 8,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "bow",
+        "pin": 10,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "buttons": [],
+    "imu": {
+      "sda": 6,
+      "scl": 7
+    },
+    "presets": {
+      "retract": {
+        "servos": {
+          "bow": 90,
+          "turret": 88,
+          "mr": 45,
+          "ml": 135
+        },
+        "leds": {
+          "eyes": {
+            "animation": "off"
+          }
+        },
+        "scripts": [
+          {
+            "module": "ambiance",
+            "params": {
+              "min_delay_minutes": 2,
+              "max_delay_minutes": 4,
+              "led_targets": [
+                "eyes"
+              ],
+              "led_blinks": 3,
+              "led_color_key": "tertiary",
+              "servo_targets": {
+                "bow": {
+                  "base_angle": 90,
+                  "twitch_amount": 15
+                }
+              }
+            }
+          }
+        ]
+      },
+      "stabilize": {
+        "servos": {
+          "mr": {
+            "angle": 150,
+            "delay": 1.4
+          },
+          "ml": {
+            "angle": 30,
+            "delay": 1.4
+          },
+          "bow": {
+            "angle": 10,
+            "delay": 0.6
+          },
+          "turret": {
+            "angle": 88,
+            "delay": 0
+          }
+        },
+        "leds": {
+          "eyes": {
+            "animation": "fill_primary"
+          }
+        },
+        "scripts": [
+          {
+            "module": "stabilizer",
+            "params": {
+              "servo_r": "mr",
+              "servo_l": "ml",
+              "base_angle": 158,
+              "pitch_scale": 1.2,
+              "roll_scale": 0.9,
+              "min_angle": 30,
+              "max_angle": 160,
+              "max_diff": 40
+            }
+          }
+        ]
+      },
+      "stabilize right": {
+        "servos": {
+          "mr": {
+            "angle": 150,
+            "delay": 0
+          },
+          "ml": {
+            "angle": 30,
+            "delay": 0
+          },
+          "bow": {
+            "angle": 10,
+            "delay": 0.6
+          },
+          "turret": {
+            "angle": 60,
+            "delay": 1.6
+          }
+        },
+        "leds": {
+          "eyes": {
+            "animation": "fill_tertiary"
+          }
+        },
+        "scripts": [
+          {
+            "module": "stabilizer",
+            "params": {
+              "servo_r": "mr",
+              "servo_l": "ml",
+              "base_angle": 158,
+              "pitch_scale": 1.2,
+              "roll_scale": 0.9,
+              "min_angle": 30,
+              "max_angle": 160,
+              "max_diff": 40
+            }
+          }
+        ]
+      },
+      "stabilize left": {
+        "servos": {
+          "mr": {
+            "angle": 150,
+            "delay": 0
+          },
+          "ml": {
+            "angle": 30,
+            "delay": 0
+          },
+          "bow": {
+            "angle": 10,
+            "delay": 0.6
+          },
+          "turret": {
+            "angle": 115,
+            "delay": 1.6
+          }
+        },
+        "leds": {
+          "eyes": {
+            "animation": "fill_tertiary"
+          }
+        },
+        "scripts": [
+          {
+            "module": "stabilizer",
+            "params": {
+              "servo_r": "mr",
+              "servo_l": "ml",
+              "base_angle": 158,
+              "pitch_scale": 1.2,
+              "roll_scale": 0.9,
+              "min_angle": 30,
+              "max_angle": 160,
+              "max_diff": 40
+            }
+          }
+        ]
+      },
+      "deploy": {
+        "servos": {
+          "mr": {
+            "angle": 158,
+            "delay": 0
+          },
+          "ml": {
+            "angle": 30,
+            "delay": 0
+          },
+          "bow": {
+            "angle": 10,
+            "delay": 0.2
+          },
+          "turret": {
+            "angle": 88,
+            "delay": 0
+          }
+        },
+        "leds": {
+          "eyes": {
+            "animation": "fill_primary"
+          }
+        }
+      }
+    }
+  }
+}

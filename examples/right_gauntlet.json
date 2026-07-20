@@ -1,0 +1,50 @@
+{
+  "device": {
+    "id": "right_gauntlet",
+    "debug": true,
+    "servos": [
+      {
+        "id": "main",
+        "pin": 1,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "buttons": [
+      {
+        "pin": 5,
+        "cycle": [
+          [
+            "right_gauntlet extend"
+          ],
+          [
+            "right_gauntlet retract"
+          ]
+        ]
+      },
+      {
+        "pin": 6,
+        "cycle": [
+          [
+            "mask extend"
+          ],
+          [
+            "mask retract"
+          ]
+        ]
+      }
+    ],
+    "presets": {
+      "extend": {
+        "servos": {
+          "main": 90
+        }
+      },
+      "retract": {
+        "servos": {
+          "main": 0
+        }
+      }
+    }
+  }
+}
