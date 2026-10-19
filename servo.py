@@ -49,9 +49,3 @@ class Servo:
             except Exception:
                 pass
             self.pwm = None
-
-        # force pin low (do NOT float)
-        try:
-            self._pin.init(Pin.OUT, value=0)
-        except Exception:
-            pass

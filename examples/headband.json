@@ -1,0 +1,95 @@
+{
+  "device": {
+    "id": "headband",
+    "debug": true,
+    "leds": [
+      {
+        "id": "le",
+        "pin": 5,
+        "count": 2
+      },
+      {
+        "id": "re",
+        "pin": 8,
+        "count": 2
+      }
+    ],
+    "servos": [
+      {
+        "id": "ml",
+        "pin": 6,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "mr",
+        "pin": 9,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "sl",
+        "pin": 8,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "sr",
+        "pin": 10,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "buttons": [],
+    "presets": {
+      "extend": {
+        "servos": {
+          "ml": 35,
+          "mr": 145,
+          "sl": 165,
+          "sr": 15
+        },
+        "leds": {
+          "re": {
+            "color": [
+              180,
+              20,
+              0
+            ]
+          },
+          "le": {
+            "color": [
+              180,
+              20,
+              0
+            ]
+          }
+        }
+      },
+      "retract": {
+        "servos": {
+          "ml": 145,
+          "mr": 35,
+          "sl": 5,
+          "sr": 175
+        },
+        "leds": {
+          "re": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          },
+          "le": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

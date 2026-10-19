@@ -2,6 +2,30 @@
   "device": {
     "id": "mask",
     "debug": true,
+    "default_preset": "retract",
+    "palette": {
+      "primary": [
+        180,
+        20,
+        0
+      ],
+      "secondary": [
+        100,
+        40,
+        0
+      ],
+      "tertiary": [
+        255,
+        255,
+        255
+      ],
+      "variance": 0.2,
+      "pulse": [
+        255,
+        150,
+        50
+      ]
+    },
     "leds": [
       {
         "id": "rm",
@@ -27,13 +51,13 @@
     "servos": [
       {
         "id": "ml",
-        "pin": 21,
+        "pin": 0,
         "min_angle": 0,
         "max_angle": 180
       },
       {
         "id": "mr",
-        "pin": 20,
+        "pin": 1,
         "min_angle": 0,
         "max_angle": 180
       },
@@ -54,79 +78,112 @@
     "presets": {
       "extend": {
         "servos": {
-          "ml": 35,
-          "mr": 145,
-          "sl": 165,
-          "sr": 15
+          "ml": {
+            "angle": 30
+          },
+          "mr": {
+            "angle": 150
+          },
+          "sl": {
+            "angle": 180,
+            "delay": 0.5
+          },
+          "sr": {
+            "angle": 0,
+            "delay": 0.5
+          }
         },
         "leds": {
           "re": {
-            "color": [
-              180,
-              20,
-              0
-            ]
+            "animation": "fill_primary"
           },
           "le": {
-            "color": [
-              180,
-              20,
-              0
-            ]
+            "animation": "fill_primary"
           },
           "rm": {
-            "color": [
-              100,
-              40,
-              0
-            ]
+            "animation": "fill_secondary"
           },
           "lm": {
-            "color": [
-              100,
-              40,
-              0
-            ]
+            "animation": "fill_secondary"
+          }
+        }
+      },
+      "extend dark": {
+        "servos": {
+          "ml": {
+            "angle": 30
+          },
+          "mr": {
+            "angle": 150
+          },
+          "sl": {
+            "angle": 180,
+            "delay": 0.5
+          },
+          "sr": {
+            "angle": 0,
+            "delay": 0.5
+          }
+        },
+        "leds": {
+          "re": {
+            "animation": "off"
+          },
+          "le": {
+            "animation": "off"
+          },
+          "rm": {
+            "animation": "fill_secondary"
+          },
+          "lm": {
+            "animation": "fill_secondary"
           }
         }
       },
       "retract": {
         "servos": {
-          "ml": 145,
-          "mr": 35,
-          "sl": 5,
-          "sr": 175
+          "ml": {
+            "angle": 145
+          },
+          "mr": {
+            "angle": 35
+          },
+          "sl": {
+            "angle": 5
+          },
+          "sr": {
+            "angle": 175
+          }
         },
         "leds": {
           "re": {
-            "color": [
-              0,
-              0,
-              0
-            ]
+            "animation": "off"
           },
           "le": {
-            "color": [
-              0,
-              0,
-              0
-            ]
+            "animation": "off"
           },
           "rm": {
-            "color": [
-              0,
-              0,
-              0
-            ]
+            "animation": "off"
           },
           "lm": {
-            "color": [
-              0,
-              0,
-              0
-            ]
+            "animation": "off"
           }
-        }
+        },
+        "scripts": [
+          {
+            "module": "ambiance",
+            "params": {
+              "min_delay_minutes": 1,
+              "max_delay_minutes": 3,
+              "led_targets": [
+                "rm",
+                "lm"
+              ],
+              "led_color_key": "secondary",
+              "led_blinks": 3
+            }
+          }
+        ]
       }
     }
   }

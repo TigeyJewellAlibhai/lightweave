@@ -1,0 +1,53 @@
+{
+  "device": {
+    "id": "book",
+    "debug": true,
+    "default_preset": "off",
+    "palette": {
+      "primary": [120, 50, 0],
+      "secondary": [20, 2, 0],
+      "tertiary": [12, 10, 6],
+      "variance": 0.2,
+      "pulse": [255, 255, 255]
+    },
+
+    "background": [
+      {
+        "module": "rlcd_interface",
+        "params": {
+          "spi_bus": 1,
+          "sck": 11,
+          "mosi": 12,
+          "cs": 40,
+          "dc": 5,
+          "rst": 41,
+          "boot_btn": 0,
+          "key_btn": 18,
+          "width": 300,
+          "height": 400
+        }
+      }
+    ],
+
+    "servos": [],
+
+    "leds": [
+      {"id": "main", "pin": 15, "count": 6}
+    ],
+
+    "buttons": [],
+
+    "presets": {
+      "off": {
+        "leds": {
+          "main": {"animation": "off"}
+        }
+      },
+      "on": {
+        "leds": {
+          "main": {"animation": "fill_primary"}
+        }
+      }
+    }
+  }
+}

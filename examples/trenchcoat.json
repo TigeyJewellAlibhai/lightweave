@@ -1,0 +1,125 @@
+{
+  "device": {
+    "id": "trenchcoat",
+    "debug": true,
+    "default_preset": "retracted",
+    "palette": {
+      "primary": [
+        255,
+        0,
+        0
+      ]
+    },
+    "leds": [
+      {
+        "id": "left",
+        "pin": 8,
+        "count": 30,
+        "type": "SK6812"
+      },
+      {
+        "id": "right",
+        "pin": 10,
+        "count": 30,
+        "type": "SK6812"
+      }
+    ],
+    "servos": [
+      {
+        "id": "left",
+        "pin": 9,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "right",
+        "pin": 17,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "buttons": [
+      {
+        "pin": 5,
+        "cycle": [
+          [
+            {
+              "preset": "extend",
+              "target": "headband"
+            }
+          ],
+          [
+            {
+              "preset": "retract",
+              "target": "headband"
+            }
+          ]
+        ]
+      },
+      {
+        "pin": 6,
+        "cycle": [
+          [
+            {
+              "preset": "extend",
+              "target": "wings"
+            }
+          ],
+          [
+            {
+              "preset": "retract",
+              "target": "wings"
+            }
+          ]
+        ]
+      },
+      {
+        "pin": 7,
+        "cycle": [
+          [
+            {
+              "preset": "extended",
+              "target": "trenchcoat"
+            }
+          ],
+          [
+            {
+              "preset": "retracted",
+              "target": "trenchcoat"
+            }
+          ]
+        ]
+      }
+    ],
+    "presets": {
+      "extended": {
+        "servos": {
+          "left": 40,
+          "right": 140
+        },
+        "leds": {
+          "left": {
+            "animation": "fill_primary"
+          },
+          "right": {
+            "animation": "fill_primary"
+          }
+        }
+      },
+      "retracted": {
+        "servos": {
+          "left": 140,
+          "right": 40
+        },
+        "leds": {
+          "left": {
+            "animation": "off"
+          },
+          "right": {
+            "animation": "off"
+          }
+        }
+      }
+    }
+  }
+}

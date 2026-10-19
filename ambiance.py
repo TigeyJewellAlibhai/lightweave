@@ -81,15 +81,12 @@ def _trigger_event():
 
         target_strips = [strip for led_id, strip in _leds.items() if led_id in led_targets]
         
-        # 🔹 FIXED: Access the .np attribute to call fill() and write()
         for _ in range(num_blinks):
             for strip in target_strips:
-                strip.np.fill(blink_color)
-                strip.np.write()
+                strip.fill(blink_color)
             time.sleep_ms(60)
             for strip in target_strips:
-                strip.np.fill((0, 0, 0))
-                strip.np.write()
+                strip.fill((0, 0, 0))
             time.sleep_ms(100)
 
     # --- Servo Twitching ---

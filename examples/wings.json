@@ -1,0 +1,139 @@
+{
+  "device": {
+    "id": "wings",
+    "debug": true,
+    "default_preset": "retract",
+    "palette": {
+      "primary": [
+        180,
+        20,
+        0
+      ],
+      "secondary": [
+        100,
+        40,
+        0
+      ],
+      "tertiary": [
+        255,
+        255,
+        255
+      ],
+      "variance": 0.2,
+      "pulse": [
+        255,
+        150,
+        50
+      ]
+    },
+    "leds": [
+      {
+        "id": "rw",
+        "pin": 1,
+        "count": 12,
+        "type": "SK6812"
+      },
+      {
+        "id": "lw",
+        "pin": 2,
+        "count": 12,
+        "type": "SK6812"
+      }
+    ],
+    "servos": [
+      {
+        "id": "l",
+        "pin": 3,
+        "min_angle": 0,
+        "max_angle": 180
+      },
+      {
+        "id": "r",
+        "pin": 4,
+        "min_angle": 0,
+        "max_angle": 180
+      }
+    ],
+    "outputs": [
+      {
+        "id": "wing_power",
+        "pin": 10,
+        "initial": "low"
+      }
+    ],
+    "buttons": [],
+    "presets": {
+      "extend": {
+        "servos": {
+          "l": {
+            "angle": 90,
+            "delay": 0.1
+          },
+          "r": {
+            "angle": 90,
+            "delay": 0.1
+          }
+        },
+        "outputs": {
+          "wing_power": "high"
+        },
+        "leds": {
+          "rw": {
+            "animation": "fill_primary"
+          },
+          "lw": {
+            "animation": "fill_primary"
+          }
+        }
+      },
+      "extend dark": {
+        "servos": {
+          "l": {
+            "angle": 90,
+            "delay": 0.1
+          },
+          "r": {
+            "angle": 90,
+            "delay": 0.1
+          }
+        },
+        "outputs": {
+          "wing_power": "high"
+        },
+        "leds": {
+          "rw": {
+            "animation": "off"
+          },
+          "lw": {
+            "animation": "off"
+          }
+        }
+      },
+      "retract": {
+        "servos": {
+          "l": {
+            "angle": 168
+          },
+          "r": {
+            "angle": 12
+          }
+        },
+        "outputs": {
+          "wing_power": {
+            "state": "low",
+            "delay": 2
+          }
+        },
+        "leds": {
+          "rw": {
+            "animation": "off"
+          },
+          "lw": {
+            "animation": "off"
+          }
+        },
+        "scripts": []
+      }
+    }
+  }
+}

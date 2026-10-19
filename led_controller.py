@@ -4,9 +4,13 @@ import neopixel
 import random
 
 class LedController:
-    def __init__(self, pin, count, name=None):
+    def __init__(self, pin, count, name=None, led_type="WS2812"):
         self.name = name or f"LED_{pin}"
-        self.np = neopixel.NeoPixel(machine.Pin(pin), count)
+        self.led_type = led_type.upper()
+        if self.led_type not in ("WS2812", "SK6812"):
+            raise ValueError(f"Unsupported LED type: {led_type}")
+        self.bpp = 4 if self.led_type == "SK6812" else 3
+        self.np = neopixel.NeoPixel(machine.Pin(pin), count, bpp=self.bpp)
         self.count = count
 
         # Palette parameters
@@ -45,13 +49,23 @@ class LedController:
     # Helper: apply brightness and variance
     # ---------------------------
     def apply_color(self, color):
-        r, g, b = color
+        r, g, b = color[:3]
+        white = color[3] if len(color) > 3 else 0
         # Apply variance
         var_amount = int(255 * self.variance)
         r = max(0, min(255, int(r + random.randint(-var_amount, var_amount))))
         g = max(0, min(255, int(g + random.randint(-var_amount, var_amount))))
         b = max(0, min(255, int(b + random.randint(-var_amount, var_amount))))
-        return (r, g, b)
+        return (r, g, b, white) if self.bpp == 4 else (r, g, b)
+
+    def _pixel_color(self, color):
+        if self.bpp == 4:
+            return tuple(color[:4]) + ((0,) if len(color) < 4 else ())
+        return tuple(color[:3])
+
+    def fill(self, color):
+        self.np.fill(self._pixel_color(color))
+        self.np.write()
 
     # ---------------------------
     # Animations
@@ -62,7 +76,7 @@ class LedController:
             if random.random() < 0.1:  # 10% chance of sparkle
                 self.np[i] = self.apply_color(self.primary)
             else:
-                self.np[i] = (0, 0, 0)
+                self.np[i] = self._pixel_color((0, 0, 0))
         self.np.write()
 
     def animation_fire(self):
@@ -80,39 +94,39 @@ class LedController:
         color = tuple(int(c * intensity) for c in self.primary)
         color = self.apply_color(color)
         for i in range(self.count):
-            self.np[i] = color
+            self.np[i] = self._pixel_color(color)
         self.np.write()
 
     def animation_fill_primary(self):
         # 🔹 FIXED: Use the raw color without applying variance for a solid fill.
         color = self.primary
         for i in range(self.count):
-            self.np[i] = color
+            self.np[i] = self._pixel_color(color)
         self.np.write()
 
     def animation_fill_secondary(self):
         # 🔹 FIXED: Use the raw color without applying variance for a solid fill.
         color = self.secondary
         for i in range(self.count):
-            self.np[i] = color
+            self.np[i] = self._pixel_color(color)
         self.np.write()
 
     def animation_fill_tertiary(self):
         # 🔹 FIXED: Use the raw color without applying variance for a solid fill.
         color = self.tertiary
         for i in range(self.count):
-            self.np[i] = color
+            self.np[i] = self._pixel_color(color)
         self.np.write()
 
     def animation_off(self):
         for i in range(self.count):
-            self.np[i] = (0, 0, 0)
+            self.np[i] = self._pixel_color((0, 0, 0))
         self.np.write()
 
     def animation_pulse(self):
         color = self.apply_color(self.pulse)
         for i in range(self.count):
-            self.np[i] = color
+            self.np[i] = self._pixel_color(color)
         self.np.write()
 
     # ---------------------------

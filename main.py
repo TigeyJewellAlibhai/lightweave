@@ -24,10 +24,11 @@ DEBUG = config["device"].get("debug", False)
 HEARTBEAT_INTERVAL_MS = 60000
 
 # --- Hardware & Script Objects ---
-servos, leds, buttons, accel = {}, {}, {}, None
+servos, leds, outputs, buttons, accel = {}, {}, {}, {}, None
 active_scripts, background_scripts = [], []
 active_devices = {}
 _servo_tasks = [] # 🔹 NEW: A list to manage non-blocking servo movements
+_output_tasks = []
 
 # --- State Variables ---
 _current_palette = None
@@ -68,7 +69,7 @@ def apply_preset(preset_id):
     It applies immediate changes (LEDs, scripts) and creates a background
     task for the time-based servo movements.
     """
-    global _current_preset, _servo_tasks
+    global _current_preset, _servo_tasks, _output_tasks
     stop_scripts()
 
     if _current_preset != preset_id:
@@ -79,6 +80,8 @@ def apply_preset(preset_id):
     if not preset:
         if DEBUG: print(f"[DEBUG] Preset '{preset_id}' not found")
         return
+
+    _output_tasks.clear()
 
     if DEBUG: print(f"[DEBUG] Applying preset '{preset_id}'")
     
@@ -111,6 +114,39 @@ def apply_preset(preset_id):
         _servo_tasks.append(new_task)
         if DEBUG: print(f"[Servo Manager] Created task with {len(servo_moves)} moves.")
 
+    output_moves = []
+    for output_id, entry in preset.get("outputs", {}).items():
+        if output_id in outputs:
+            state = entry.get("state", "low") if isinstance(entry, dict) else entry
+            delay = entry.get("delay", 0) if isinstance(entry, dict) else 0
+            if isinstance(state, str):
+                state = state.lower()
+            if state not in ("high", "low", 0, 1, False, True):
+                raise ValueError(f"Invalid state for output '{output_id}': {state}")
+            output_moves.append((delay, output_id, 1 if state in ("high", 1, True) else 0))
+        elif DEBUG:
+            print(f"[Output Manager] Output '{output_id}' is not configured")
+
+    if output_moves:
+        start_time = time.ticks_ms()
+        delayed_moves = []
+        for delay, output_id, state in output_moves:
+            if delay <= 0:
+                outputs[output_id].value(state)
+                if DEBUG:
+                    level = "high" if state else "low"
+                    print(f"[Output Manager] Set '{output_id}' {level} immediately")
+            else:
+                delayed_moves.append((delay, output_id, state))
+
+        if delayed_moves:
+            _output_tasks.append({
+                "start_time": start_time,
+                "moves": delayed_moves,
+            })
+            if DEBUG:
+                print(f"[Output Manager] Scheduled {len(delayed_moves)} delayed action(s)")
+
     # --- IMMEDIATE ACTIONS (Continued) ---
     # 3. Start any associated scripts immediately.
     if "scripts" in preset:
@@ -133,6 +169,8 @@ def _update_servos():
                 delay_ms, sid, angle = move[0] * 1000, move[1], move[2]
                 if time.ticks_diff(now, task["start_time"]) >= delay_ms:
                     servos[sid].write_angle(angle)
+                    if DEBUG:
+                        print(f"[Servo Manager] Wrote servo '{sid}' angle {angle}")
                     if servos[sid] not in task["moved_servos"]:
                         task["moved_servos"].append(servos[sid])
                 else:
@@ -147,11 +185,28 @@ def _update_servos():
 
         elif task["state"] == "settling":
             # Wait for the settling period (2 seconds) to finish
-            if time.ticks_diff(now, task["settle_start_time"]) >= 2000:
+            if time.ticks_diff(now, task["settle_start_time"]) >= 200:
                 for s in task["moved_servos"]:
                     s.deinit()
                 if DEBUG: print(f"[Servo Manager] Settle complete, de-init {len(task['moved_servos'])} servos.")
                 _servo_tasks.remove(task)
+
+def _update_outputs():
+    now = time.ticks_ms()
+    for task in _output_tasks[:]:
+        remaining_moves = []
+        for delay, output_id, state in task["moves"]:
+            if time.ticks_diff(now, task["start_time"]) >= delay * 1000:
+                outputs[output_id].value(state)
+                if DEBUG:
+                    level = "high" if state else "low"
+                    print(f"[Output Manager] Set '{output_id}' {level} after {delay}s")
+            else:
+                remaining_moves.append((delay, output_id, state))
+        if remaining_moves:
+            task["moves"] = remaining_moves
+        else:
+            _output_tasks.remove(task)
 
 # --------------------------------------------------------------------------
 # 3. MODULAR SCRIPT MANAGEMENT (Unchanged)
@@ -261,7 +316,16 @@ def send_heartbeat(force=False):
 # 5. INITIALIZATION (Unchanged)
 # --------------------------------------------------------------------------
 for s_cfg in config["device"].get("servos", []): servos[s_cfg["id"]] = servo.Servo(s_cfg["pin"])
-for l_cfg in config["device"].get("leds", []): leds[l_cfg["id"]] = LedController(l_cfg["pin"], l_cfg["count"])
+for l_cfg in config["device"].get("leds", []): leds[l_cfg["id"]] = LedController(l_cfg["pin"], l_cfg["count"], led_type=l_cfg.get("type", "WS2812"))
+for o_cfg in config["device"].get("outputs", []):
+    output = machine.Pin(o_cfg["pin"], machine.Pin.OUT)
+    initial_state = o_cfg.get("initial", "low")
+    if isinstance(initial_state, str):
+        initial_state = initial_state.lower()
+    if initial_state not in ("high", "low", 0, 1, False, True):
+        raise ValueError(f"Invalid initial state for output '{o_cfg['id']}': {initial_state}")
+    output.value(1 if initial_state in ("high", 1, True) else 0)
+    outputs[o_cfg["id"]] = output
 for b_cfg in config["device"].get("buttons", []): buttons[b_cfg["pin"]] = {"pin": machine.Pin(b_cfg["pin"], machine.Pin.IN, machine.Pin.PULL_UP), "config": b_cfg, "last": 1, "cycle_idx": 0}
 if "imu" in config["device"]:
     try:
@@ -289,6 +353,7 @@ while True:
     check_buttons()
     check_incoming()
     _update_servos() # 🔹 ADDED: Call the servo manager in every loop
+    _update_outputs()
     
     now = time.ticks_ms()
     if time.ticks_diff(now, last_update) >= 150:

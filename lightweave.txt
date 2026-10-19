@@ -11,6 +11,11 @@ Lightweave is structured as follows:
 
 Config structure:
 
+The optional LED `type` is `WS2812` by default; use `SK6812` for RGBW strips.
+RGB colors leave the SK6812 white channel off, and a fourth color component can
+set it. Define digital output pins in `device.outputs`; preset output states
+accept `high` or `low`, with optional `delay` values in seconds.
+
 {
   "device": {
     "id": "name of device",
@@ -38,8 +43,12 @@ Config structure:
     "servos": [],
     
     "leds": [
-      {"id": "strip1", "pin": 0, "count": 6},
-      {"id": "strip2","pin": 5,"count": 2}
+      {"id": "strip1", "pin": 0, "count": 6, "type": "WS2812"},
+      {"id": "strip2", "pin": 5, "count": 2, "type": "SK6812"}
+    ],
+
+    "outputs": [
+      {"id": "amp_enable", "pin": 21, "initial": "low"}
     ],
     
     "buttons": [
@@ -74,6 +83,11 @@ Config structure:
               "animation": "fill_primary"
             }
           }
+        }
+      },
+      "accessory_on": {
+        "outputs": {
+          "amp_enable": {"state": "high", "delay": 0.5}
         }
       }
     }
