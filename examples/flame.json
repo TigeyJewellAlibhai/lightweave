@@ -1,0 +1,44 @@
+{
+  "device": {
+    "id": "flame",
+    "debug": false,
+    "default_preset": "flame",
+    "leds": [
+      {
+        "id": "flame_strip",
+        "pin": 3,
+        "count": 8,
+        "type": "SK6812"
+      }
+    ],
+    "outputs": [
+      {
+        "id": "flame_enable",
+        "pin": 4,
+        "initial": "low"
+      }
+    ],
+    "presets": {
+      "flame": {
+        "leds": {
+          "flame_strip": {
+            "animation": "flame"
+          }
+        },
+        "outputs": {
+          "flame_enable": "high"
+        }
+      },
+      "off": {
+        "leds": {
+          "flame_strip": {
+            "animation": "off"
+          }
+        },
+        "outputs": {
+          "flame_enable": "low"
+        }
+      }
+    }
+  }
+}

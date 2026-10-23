@@ -86,6 +86,18 @@ class LedController:
             self.np[i] = self.apply_color(base)
         self.np.write()
 
+    def animation_flame(self):
+        # Warm, per-pixel RGBW flicker matching the example flame script.
+        for i in range(self.count):
+            color = (
+                random.randint(180, 255),
+                random.randint(15, 60),
+                0,
+                random.randint(0, 15),
+            )
+            self.np[i] = self._pixel_color(color)
+        self.np.write()
+
     def animation_glow(self):
         # Glow: all LEDs fade in/out over time
         now = time.ticks_ms()
